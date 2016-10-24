@@ -2,32 +2,30 @@ package ahkinjava;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import netscape.javascript.JSObject;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
-import org.jnativehook.SwingDispatchService;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HelloWorld extends Application {
-    public static void main(String[] args) {
+    private Stage stage;
+    private Browser browser;
 
+    public static void main(String[] args) {
+        if (args.length > 0) browserUrl = args[0];
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);
         try {
@@ -45,24 +43,25 @@ public class HelloWorld extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Browser browser = new Browser();
+        this.stage = primaryStage;
+        Bridge bridge = new Bridge(stage);
+        browser = new Browser(bridge);
 
         primaryStage.setTitle("Hello World!");
         primaryStage.initStyle(StageStyle.UNDECORATED);
 //        primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setAlwaysOnTop(true);
 
-        Scene scene = new Scene(browser,448, 246, Color.web("#666970"));
+//        Scene scene = new Scene(browser,448, 246, Color.web("#666970"));
+        Scene scene = new Scene(browser,248, 146);
 
         browser.browser.setOnMousePressed(event -> {
-            System.out.println("setOnMousePressed");
             if (altPressed) {
                 xOffset = primaryStage.getX() - event.getScreenX();
                 yOffset = primaryStage.getY() - event.getScreenY();
             }
         });
         browser.browser.setOnMouseDragged(event -> {
-            System.out.println("setOnMouseDragged");
             if (altPressed) {
                 primaryStage.setX(event.getScreenX() + xOffset);
                 primaryStage.setY(event.getScreenY() + yOffset);
@@ -70,16 +69,17 @@ public class HelloWorld extends Application {
         });
         primaryStage.setScene(scene);
 //        primaryStage.show();
+        addAppToTray();
+
         GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
             @Override
             public void nativeKeyPressed(NativeKeyEvent e) {
                 if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
-                    try {
-                        GlobalScreen.unregisterNativeHook();
-                    } catch (NativeHookException e1) {
-                        e1.printStackTrace();
-                    }
-                    Platform.exit();
+                    Platform.runLater( () -> {
+                        if (primaryStage.isShowing()) {
+                            primaryStage.hide();
+                        }
+                    } );
                 }
 
                 if (isCtrl(e)) {
@@ -90,18 +90,10 @@ public class HelloWorld extends Application {
                     altPressed = true;
                 }
 
-                if (ctrlPressed && e.getKeyCode() == NativeKeyEvent.VC_C) {
+//                if (ctrlPressed && e.getKeyCode() == NativeKeyEvent.VC_C) {
+                if (e.getKeyCode() == NativeKeyEvent.VC_V) {
                     System.out.println("COPY");
-
-                    Platform.runLater( () -> {
-                        System.out.println("primaryStage.isShowing() " + primaryStage.isShowing());
-                        if (primaryStage.isShowing()) {
-                            primaryStage.hide();
-                        } else {
-                            primaryStage.show();
-                            browser.webEngine.load("https://poe-trademacro.github.io/awesome.html");
-                        }
-                    });
+                    toggleBrowserVisibility();
                 }
             }
 
@@ -128,9 +120,101 @@ public class HelloWorld extends Application {
         });
     }
 
+    private void toggleBrowserVisibility() {
+        Platform.runLater( () -> {
+            System.out.println("primaryStage.isShowing() " + stage.isShowing());
+            if (stage.isShowing()) {
+                stage.hide();
+            } else {
+                stage.show();
+                browser.webEngine.load(browserUrl);
+            }
+        });
+    }
+
     private boolean ctrlPressed = false;
     private boolean altPressed = false;
     private double xOffset = 0;
     private double yOffset = 0;
-}
+    private static final String iconImageLoc =
+            "https://raw.githubusercontent.com/PoE-TradeMacro/ahk-in-java/master/src/main/resources/Portal_skill_icon.png";
 
+    static String browserUrl = "https://poe-trademacro.github.io/awesome.html";
+
+
+    /**
+     * Sets up a system tray icon for the application.
+     */
+    private void addAppToTray() {
+        try {
+            // ensure awt toolkit is initialized.
+            java.awt.Toolkit.getDefaultToolkit();
+
+            // app requires system tray support, just exit if there is no support.
+            if (!java.awt.SystemTray.isSupported()) {
+                System.out.println("No system tray support, application exiting.");
+                platformExitAndUnregisterHook();
+            }
+
+            // set up a system tray icon.
+            java.awt.SystemTray tray = java.awt.SystemTray.getSystemTray();
+            URL imageLoc = new URL(
+                    iconImageLoc
+            );
+            java.awt.Image image = ImageIO.read(imageLoc);
+            java.awt.TrayIcon trayIcon = new java.awt.TrayIcon(image);
+
+            // if the user double-clicks on the tray icon, show the main app stage.
+            trayIcon.addActionListener(event -> Platform.runLater(this::toggleBrowserVisibility));
+
+            // if the user selects the default menu item (which includes the app name),
+            // show the main app stage.
+            java.awt.MenuItem openItem = new java.awt.MenuItem("Wraeclast Online (v)");
+            openItem.addActionListener(event -> Platform.runLater(this::toggleBrowserVisibility));
+
+            // the convention for tray icons seems to be to set the default icon for opening
+            // the application stage in a bold font.
+            java.awt.Font defaultFont = java.awt.Font.decode(null);
+            java.awt.Font boldFont = defaultFont.deriveFont(java.awt.Font.BOLD);
+            openItem.setFont(boldFont);
+
+            // to really exit the application, the user must go to the system tray icon
+            // and select the exit option, this will shutdown JavaFX and remove the
+            // tray icon (removing the tray icon will also shut down AWT).
+            java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
+            exitItem.addActionListener(event -> {
+                platformExitAndUnregisterHook();
+                tray.remove(trayIcon);
+            });
+
+            java.awt.MenuItem urlItem = new java.awt.MenuItem("Set URL");
+            urlItem.addActionListener(event -> {
+                String url = JOptionPane.showInputDialog("Enter URL");
+                browserUrl = url;
+            });
+
+            // setup the popup menu for the application.
+            final java.awt.PopupMenu popup = new java.awt.PopupMenu();
+            popup.add(openItem);
+            popup.add(urlItem);
+            popup.addSeparator();
+            popup.add(exitItem);
+            trayIcon.setPopupMenu(popup);
+
+            // add the application tray icon to the system tray.
+            tray.add(trayIcon);
+        } catch (java.awt.AWTException | IOException e) {
+            System.out.println("Unable to init system tray");
+            e.printStackTrace();
+        }
+    }
+
+    private void platformExitAndUnregisterHook() {
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException e1) {
+            e1.printStackTrace();
+        }
+        Platform.exit();
+    }
+}

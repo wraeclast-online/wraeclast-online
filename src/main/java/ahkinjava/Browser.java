@@ -9,18 +9,21 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-class Browser extends Region {
+class Browser extends StackPane {
  
     final WebView browser = new WebView();
     final WebEngine webEngine = browser.getEngine();
-     
-    public Browser() {
+    private final Bridge bridge;
+
+    public Browser(Bridge bridge) {
+        this.bridge = bridge;
 
         //apply the styles
         getStyleClass().add("browser");
@@ -35,7 +38,7 @@ class Browser extends Region {
                         System.out.println("newState == Worker.State.SUCCEEDED --- true");
                         Clipboard clipboard = Clipboard.getSystemClipboard();
                         JSObject win = (JSObject) webEngine.executeScript("window");
-                        System.out.println("clipboard: " + clipboard.getString());
+                        win.call("onJavaLoadSucceed", bridge);
                         win.call("onPoEItemCopy", clipboard.getString());
                     }
                 }
@@ -50,23 +53,24 @@ class Browser extends Region {
         getChildren().add(browser);
 
     }
-    private Node createSpacer() {
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        return spacer;
-    }
- 
-    @Override protected void layoutChildren() {
-        double w = getWidth();
-        double h = getHeight();
-        layoutInArea(browser,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
-    }
- 
-    @Override protected double computePrefWidth(double height) {
-        return 750;
-    }
- 
-    @Override protected double computePrefHeight(double width) {
-        return 500;
-    }
+
+//    private Node createSpacer() {
+//        Region spacer = new Region();
+//        HBox.setHgrow(spacer, Priority.ALWAYS);
+//        return spacer;
+//    }
+//
+//    @Override protected void layoutChildren() {
+//        double w = getWidth();
+//        double h = getHeight();
+//        layoutInArea(browser,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
+//    }
+//
+//    @Override protected double computePrefWidth(double height) {
+//        return 750;
+//    }
+//
+//    @Override protected double computePrefHeight(double width) {
+//        return 500;
+//    }
 }

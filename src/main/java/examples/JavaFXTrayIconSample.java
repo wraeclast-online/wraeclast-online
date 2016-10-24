@@ -1,4 +1,4 @@
-package ahkinjava;
+package examples;
 
 import javafx.application.*;
 import javafx.geometry.Pos;

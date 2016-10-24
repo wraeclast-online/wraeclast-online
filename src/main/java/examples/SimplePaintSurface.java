@@ -1,4 +1,4 @@
-package ahkinjava;
+package examples;
 
 import java.awt.*;
 import java.awt.event.*;

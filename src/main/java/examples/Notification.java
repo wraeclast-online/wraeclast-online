@@ -1,4 +1,4 @@
-package ahkinjava;
+package examples;
 
 import javax.swing.JWindow;
 import java.awt.Toolkit;

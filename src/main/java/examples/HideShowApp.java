@@ -1,4 +1,4 @@
-package ahkinjava;
+package examples;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
