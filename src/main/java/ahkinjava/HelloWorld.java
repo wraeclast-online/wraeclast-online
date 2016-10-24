@@ -53,7 +53,7 @@ public class HelloWorld extends Application {
         primaryStage.setAlwaysOnTop(true);
 
 //        Scene scene = new Scene(browser,448, 246, Color.web("#666970"));
-        Scene scene = new Scene(browser,248, 146);
+        Scene scene = new Scene(browser,650, 500);
 
         browser.browser.setOnMousePressed(event -> {
             if (altPressed) {
