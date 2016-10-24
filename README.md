@@ -5,11 +5,10 @@ Wraeclast-Online is a Proof of Concept for bringing any website into Path of Exi
 This is achieved by using JavaFX's WebView contained in an "undecorated" window.
 The example below loads this url: https://poe-trademacro.github.io/awesome.html
 
-
 ![cappp1](https://cloud.githubusercontent.com/assets/75921/19652016/c72baec2-9a41-11e6-8721-e8a3cb4b10c5.jpg)
 
-Hotkey `v` is used to toggle the Wraeclast-Online Browser (**WOB**). A system tray is provided, double click to open. Right click for options.
-You can set a different url here.
+Hotkey `v` is used to toggle the Wraeclast-Online Browser (**WOB**). This hotkey is global like in AutoHotKey (AHK).
+A system tray is provided, double click to open. Right click for options. You can set a different url here.
 
 On the commandline, you can also set the default url to be used:
 
@@ -35,3 +34,4 @@ I'm hoping to bring useful functionality like:
   * Features that use the poe client log.txt
   * Features that use the clipboard data
 
+Wraeclast-Online is fan made and is not affiliated with Grinding Gear Games. Wraeclast-Online is 100% free, no ads, gplv3 licensed, and supports Free Software Movement http://fsf.org.
