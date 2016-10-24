@@ -1,6 +1,9 @@
 package ahkinjava;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -31,13 +34,16 @@ public class HelloWorld extends Application {
 
             System.exit(1);
         }
+
+        Platform.setImplicitExit(false);
         launch(args);
     }
     
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Hello World!");
-        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setAlwaysOnTop(true);
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -51,24 +57,53 @@ public class HelloWorld extends Application {
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
         GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
             @Override
-            public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
+            public void nativeKeyPressed(NativeKeyEvent e) {
+                if (isCtrl(e)) {
+                    ctrlPressed = true;
+                }
 
-            }
+                if (ctrlPressed && e.getKeyCode() == NativeKeyEvent.VC_C) {
+                    System.out.println("COPY");
 
-            @Override
-            public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) {
-
+                    Platform.runLater( () -> {
+                        System.out.println("primaryStage.isShowing() " + primaryStage.isShowing());
+                        if (primaryStage.isShowing()) {
+                            primaryStage.hide();
+                        } else {
+                            primaryStage.show();
+                        }
+                    } );
+                }
             }
 
             @Override
             public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) {
-                primaryStage.show();
+
+            }
+            private boolean isCtrl(NativeKeyEvent e) {
+                return e.getKeyCode() == NativeKeyEvent.VC_CONTROL_L || e.getKeyCode() == NativeKeyEvent.VC_CONTROL_R;
+            }
+
+            private boolean ctrlPressed = false;
+            @Override
+            public void nativeKeyReleased(NativeKeyEvent e) {
+                if (isCtrl(e)) {
+                    ctrlPressed = false;
+                }
             }
         });
 
+//        primaryStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//
+//            }
+//        });
+
         StackPane root = new StackPane();
         root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-
+        Scene scene = new Scene(root, 448, 246);
+        scene.getStylesheets().add("style.css");
+        primaryStage.setScene(scene);
     }
 }
