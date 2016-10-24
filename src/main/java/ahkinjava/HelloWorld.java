@@ -4,13 +4,17 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import netscape.javascript.JSObject;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.SwingDispatchService;
@@ -41,9 +45,11 @@ public class HelloWorld extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        Browser browser = new Browser();
+
         primaryStage.setTitle("Hello World!");
         primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setAlwaysOnTop(true);
+//        primaryStage.setAlwaysOnTop(true);
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -58,6 +64,16 @@ public class HelloWorld extends Application {
         GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
             @Override
             public void nativeKeyPressed(NativeKeyEvent e) {
+                if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+                    try {
+                        GlobalScreen.unregisterNativeHook();
+                    } catch (NativeHookException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.exit(0);
+                }
+
+
                 if (isCtrl(e)) {
                     ctrlPressed = true;
                 }
@@ -71,8 +87,9 @@ public class HelloWorld extends Application {
                             primaryStage.hide();
                         } else {
                             primaryStage.show();
+                            browser.webEngine.load("https://poe-trademacro.github.io/awesome.html");
                         }
-                    } );
+                    });
                 }
             }
 
@@ -100,10 +117,14 @@ public class HelloWorld extends Application {
 //            }
 //        });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        Scene scene = new Scene(root, 448, 246);
-        scene.getStylesheets().add("style.css");
+//        StackPane root = new StackPane();
+//        root.getChildren().add(btn);
+//        Scene scene = new Scene(root, 448, 246);
+
+        Scene scene = new Scene(browser,448, 246, Color.web("#666970"));
+
+//        scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
     }
 }
+
