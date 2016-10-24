@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -35,7 +36,6 @@ public class HelloWorld extends Application {
         catch (NativeHookException ex) {
             System.err.println("There was a problem registering the native hook.");
             System.err.println(ex.getMessage());
-
             System.exit(1);
         }
 
@@ -49,18 +49,27 @@ public class HelloWorld extends Application {
 
         primaryStage.setTitle("Hello World!");
         primaryStage.initStyle(StageStyle.UNDECORATED);
-//        primaryStage.setAlwaysOnTop(true);
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+//        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.setAlwaysOnTop(true);
+
+        Scene scene = new Scene(browser,448, 246, Color.web("#666970"));
+
+        browser.browser.setOnMousePressed(event -> {
+            System.out.println("setOnMousePressed");
+            if (altPressed) {
+                xOffset = primaryStage.getX() - event.getScreenX();
+                yOffset = primaryStage.getY() - event.getScreenY();
             }
         });
-
-        GlobalScreen.setEventDispatcher(new SwingDispatchService());
+        browser.browser.setOnMouseDragged(event -> {
+            System.out.println("setOnMouseDragged");
+            if (altPressed) {
+                primaryStage.setX(event.getScreenX() + xOffset);
+                primaryStage.setY(event.getScreenY() + yOffset);
+            }
+        });
+        primaryStage.setScene(scene);
+//        primaryStage.show();
         GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
             @Override
             public void nativeKeyPressed(NativeKeyEvent e) {
@@ -70,12 +79,15 @@ public class HelloWorld extends Application {
                     } catch (NativeHookException e1) {
                         e1.printStackTrace();
                     }
-                    System.exit(0);
+                    Platform.exit();
                 }
-
 
                 if (isCtrl(e)) {
                     ctrlPressed = true;
+                }
+
+                if (isAlt(e)) {
+                    altPressed = true;
                 }
 
                 if (ctrlPressed && e.getKeyCode() == NativeKeyEvent.VC_C) {
@@ -100,31 +112,25 @@ public class HelloWorld extends Application {
             private boolean isCtrl(NativeKeyEvent e) {
                 return e.getKeyCode() == NativeKeyEvent.VC_CONTROL_L || e.getKeyCode() == NativeKeyEvent.VC_CONTROL_R;
             }
+            private boolean isAlt(NativeKeyEvent e) {
+                return e.getKeyCode() == NativeKeyEvent.VC_ALT_L || e.getKeyCode() == NativeKeyEvent.VC_ALT_R;
+            }
 
-            private boolean ctrlPressed = false;
             @Override
             public void nativeKeyReleased(NativeKeyEvent e) {
                 if (isCtrl(e)) {
                     ctrlPressed = false;
                 }
+                if (isAlt(e)) {
+                    altPressed = false;
+                }
             }
         });
-
-//        primaryStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//
-//            }
-//        });
-
-//        StackPane root = new StackPane();
-//        root.getChildren().add(btn);
-//        Scene scene = new Scene(root, 448, 246);
-
-        Scene scene = new Scene(browser,448, 246, Color.web("#666970"));
-
-//        scene.getStylesheets().add("style.css");
-        primaryStage.setScene(scene);
     }
+
+    private boolean ctrlPressed = false;
+    private boolean altPressed = false;
+    private double xOffset = 0;
+    private double yOffset = 0;
 }
 
