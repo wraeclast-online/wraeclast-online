@@ -32,4 +32,6 @@ I'm hoping to bring useful functionality like:
   * Uniques Viewer
   * The most useful wiki pages
   * Beginner Guide
+  * Features that use the poe client log.txt
+  * Features that use the clipboard data
 
