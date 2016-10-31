@@ -15,40 +15,28 @@
  *     along with wraelclast-online.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wo;
+package wo.trade;
 
-import javafx.application.Platform;
-import lombok.Getter;
-import wo.trade.*;
-
-import javax.swing.*;
 import java.util.List;
 
 /**
- * This is what js can use to callback
+ * Created 10/31/2016.
  */
-public class Bridge {
-    @Getter
-    private final JFrame stage;
-    private final TradeService tradeService = new TradeService();
+public class TradeService {
 
-    public Bridge(JFrame stage) {
-        this.stage = stage;
-    }
-
-    public void setSize(int w, int h) {
-        stage.setSize(w, h);
-    }
-
-    public void exit() {
-        Platform.exit();
-    }
-
-    public TradeParams newTradeParams() {
-        return new TradeParams();
-    }
+    private final BackendClient client = new BackendClient();
 
     public List<TradeItem> searchTradeItems(TradeParams params) {
-        return tradeService.searchTradeItems(params);
+        List<TradeItem> result = null;
+        try {
+            String location = client.post(params.toString());
+            String html = client.get(location);
+
+            SearchPageScraper scraper = new SearchPageScraper(html);
+            result = scraper.parse();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }
