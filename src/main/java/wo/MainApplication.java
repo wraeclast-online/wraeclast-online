@@ -1,10 +1,25 @@
-package ahkinjava;
+/*
+ *     This file is part of wraelclast-online.
+ *
+ *     wraelclast-online is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     wraelclast-online is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with wraelclast-online.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package wo;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jnativehook.GlobalScreen;
@@ -16,31 +31,16 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HelloWorld extends Application {
+/**
+ * Created 10/31/2016.
+ */
+public class MainApplication extends Application {
     private Stage stage;
     private Browser browser;
 
-    public static void main(String[] args) {
-        if (args.length > 0) browserUrl = args[0];
-        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-        logger.setLevel(Level.WARNING);
-        try {
-            GlobalScreen.registerNativeHook();
-        }
-        catch (NativeHookException ex) {
-            System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
-            System.exit(1);
-        }
-
-        Platform.setImplicitExit(false);
-        launch(args);
-    }
-    
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;

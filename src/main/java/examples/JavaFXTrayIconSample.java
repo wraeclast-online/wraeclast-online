@@ -21,7 +21,7 @@ public class JavaFXTrayIconSample extends Application {
     // you could also use multiple icons to allow for clean display of tray icons on hi-dpi devices.
     private static final String iconImageLoc =
 //            "http://icons.iconarchive.com/icons/scafer31000/bubble-circle-3/16/GameCenter-icon.png";
-            "https://raw.githubusercontent.com/PoE-TradeMacro/ahk-in-java/master/src/main/resources/Portal_skill_icon.png";
+            "https://raw.githubusercontent.com/PoE-TradeMacro/ahk-in-java/master/src/wo.main/resources/Portal_skill_icon.png";
 
     // application stage is stored so that it can be shown and hidden based on system tray icon operations.
     private Stage stage;
@@ -33,7 +33,7 @@ public class JavaFXTrayIconSample extends Application {
     private DateFormat timeFormat = SimpleDateFormat.getTimeInstance();
 
     // sets up the javafx application.
-    // a tray icon is setup for the icon, but the main stage remains invisible until the user
+    // a tray icon is setup for the icon, but the wo.main stage remains invisible until the user
     // interacts with the tray icon.
     @Override public void start(final Stage stage) {
         // stores a reference to the stage.
@@ -70,7 +70,7 @@ public class JavaFXTrayIconSample extends Application {
      * For this dummy app, the (JavaFX scenegraph) content, just says "hello, world".
      * A real app, might load an FXML or something like that.
      *
-     * @return the main window application content.
+     * @return the wo.main window application content.
      */
     private Node createContent() {
         Label hello = new Label("hello, world");
@@ -106,11 +106,11 @@ public class JavaFXTrayIconSample extends Application {
             java.awt.Image image = ImageIO.read(imageLoc);
             java.awt.TrayIcon trayIcon = new java.awt.TrayIcon(image);
 
-            // if the user double-clicks on the tray icon, show the main app stage.
+            // if the user double-clicks on the tray icon, show the wo.main app stage.
             trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
 
             // if the user selects the default menu item (which includes the app name), 
-            // show the main app stage.
+            // show the wo.main app stage.
             java.awt.MenuItem openItem = new java.awt.MenuItem("hello, world");
             openItem.addActionListener(event -> Platform.runLater(this::showStage));
 

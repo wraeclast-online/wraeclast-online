@@ -88,7 +88,7 @@ public class NativeHookDemo extends JFrame implements ActionListener, ItemListen
 	 * Instantiates a new native hook demo.
 	 */
 	public NativeHookDemo() {
-		// Setup the main window.
+		// Setup the wo.main window.
 		setTitle("JNativeHook Demo");
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
