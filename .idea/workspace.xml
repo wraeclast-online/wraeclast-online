@@ -2,26 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="427f838e-9594-49b6-89aa-65ba79441988" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/wo/trade/Mod.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/wo/trade/Rarity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/wo/trade/ManualTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/Bridge.java" afterPath="$PROJECT_DIR$/src/main/java/wo/Bridge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/Browser.java" afterPath="$PROJECT_DIR$/src/main/java/wo/Browser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/Main.java" afterPath="$PROJECT_DIR$/src/main/java/wo/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/MainConfig.java" afterPath="$PROJECT_DIR$/src/main/java/wo/MainConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/SystemTray.java" afterPath="$PROJECT_DIR$/src/main/java/wo/SystemTray.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/XMainApplication.java" afterPath="$PROJECT_DIR$/src/main/java/wo/XMainApplication.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/javafx/UndecoratedUtilityWindow.java" afterPath="$PROJECT_DIR$/src/main/java/wo/javafx/UndecoratedUtilityWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/nativehook/NativeHook.java" afterPath="$PROJECT_DIR$/src/main/java/wo/nativehook/NativeHook.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/trade/SearchPageScraper.java" afterPath="$PROJECT_DIR$/src/main/java/wo/trade/SearchPageScraper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/trade/TradeItem.java" afterPath="$PROJECT_DIR$/src/main/java/wo/trade/TradeItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/wo/trade/TradeParams.java" afterPath="$PROJECT_DIR$/src/main/java/wo/trade/TradeParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/akara.html" afterPath="$PROJECT_DIR$/src/main/resources/akara.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/wo/trade/TradeServiceTest.java" afterPath="$PROJECT_DIR$/src/test/java/wo/trade/TradeServiceTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wraelclast-online.iml" afterPath="$PROJECT_DIR$/wraelclast-online.iml" />
     </list>
     <ignored path="wraelclast-online.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,11 +23,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/wo/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="171">
               <caret line="39" column="31" selection-start-line="39" selection-start-column="31" selection-end-line="39" selection-end-column="31" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ManualTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/wo/trade/ManualTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="32" column="24" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -104,7 +97,6 @@
         <option value="$PROJECT_DIR$/src/main/resources/config.properties" />
         <option value="$PROJECT_DIR$/src/main/java/wo/jna/JnaHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/wo/MainConfig.java" />
-        <option value="$PROJECT_DIR$/src/test/java/wo/trade/ManualTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/wo/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/wo/trade/Rarity.java" />
         <option value="$PROJECT_DIR$/src/main/java/wo/trade/Mod.java" />
@@ -117,6 +109,7 @@
         <option value="$PROJECT_DIR$/src/main/java/wo/Browser.java" />
         <option value="$PROJECT_DIR$/src/main/resources/akara.html" />
         <option value="$PROJECT_DIR$/src/main/java/wo/nativehook/NativeHook.java" />
+        <option value="$PROJECT_DIR$/src/test/java/wo/trade/ManualTest.java" />
       </list>
     </option>
   </component>
@@ -223,6 +216,32 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wraelclast-online" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wraelclast-online" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -253,7 +272,7 @@
       <recent name="C:\Users\sj\wraelclast-online" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.ManualTest">
     <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -600,8 +619,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.Main" />
-        <item index="1" class="java.lang.String" itemvalue="Application.ManualTest" />
+        <item index="0" class="java.lang.String" itemvalue="Application.ManualTest" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Main" />
         <item index="2" class="java.lang.String" itemvalue="JUnit.TradeServiceTest.test_search_tabula" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.TradeServiceTest" />
         <item index="4" class="java.lang.String" itemvalue="JUnit.TradeServiceTest.test_added_chaos_dmg" />
@@ -652,7 +671,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -664,7 +683,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35457516" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23600605" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23600605" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1000,16 +1019,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/wo/trade/ManualTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/wo/trade/TradeParams.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
@@ -1117,6 +1126,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="39" column="31" selection-start-line="39" selection-start-column="31" selection-end-line="39" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/wo/trade/ManualTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="32" column="24" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
