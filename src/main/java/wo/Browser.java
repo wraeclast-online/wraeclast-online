@@ -93,7 +93,11 @@ class Browser extends StackPane {
             stage.setVisible(false);
         } else {
             stage.setVisible(true);
-            load(url);
+            if (webEngine.getLoadWorker().getState() == Worker.State.SUCCEEDED) {
+                webEngine.reload();
+            } else {
+                load(url);
+            }
         }
     }
 }

@@ -130,6 +130,8 @@
               params.setOnline("x");
               var json = bridge.searchTradeItems(params);
               //$("#resultJson").text(json);
+
+              $("#resultTable tbody").empty();
               JSON.parse(json).tradeItems.forEach(function(item) {
                 var tr = $("<tr></tr>");
                 tr.append("<td>" + item.seller + "</td>");
@@ -139,7 +141,7 @@
                 tr.append("<td>" + item.buyout + "</td>");
                 tr.attr("wtbmsg", itemToWtb(item));
                 tr.click(wtbClicked);
-                $("#resultTable").append(tr);
+                $("#resultTable tbody").append(tr);
               });
            } else {
               // page was run outside outside of WO
@@ -202,13 +204,17 @@
         </div>
         <div id="content">
             <table id="resultTable">
-                <tr>
-                    <th>IGN</th>
-                    <th>Account</th>
-                    <th>%</th>
-                    <th>Lvl</th>
-                    <th>Price</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>IGN</th>
+                        <th>Account</th>
+                        <th>%</th>
+                        <th>Lvl</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
 
             <pre id="resultJson"></pre>
