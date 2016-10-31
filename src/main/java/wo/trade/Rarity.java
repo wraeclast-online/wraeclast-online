@@ -15,27 +15,25 @@
  *     along with wraelclast-online.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wo;
-
-import org.aeonbits.owner.Config;
-import org.aeonbits.owner.Config.Key;
+package wo.trade;
 
 /**
- * Created 10/31/2016.
+ * Created 11/1/2016.
  */
-@Config.Sources({
-    "classpath:config.properties"
-})
-public interface MainConfig extends Config {
-    String WINDOW_TITLE_MATCH_TESTING_MODE = "WRAECLAST_ONLINE_for_testing_purposes";
+public enum Rarity {
+    normal,
+    magic,
+    rare,
+    unique,
+    gem,
+    currency,
+    divinationcard,
+    unknown;
 
-    @Key("home.url")
-    String homeUrl();
-
-    @Key("systemtray.icon.url")
-    String systemTrayIconUrl();
-
-    @Key("poe.client.window.title")
-    @DefaultValue("Path of Exile")
-    String poeClientWindowTitle();
+    public static Rarity valueOf(int ordinal) {
+        for (Rarity r : values()) {
+            if (r.ordinal() == ordinal) return r;
+        }
+        return unknown;
+    }
 }

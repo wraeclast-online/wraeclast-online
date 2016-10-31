@@ -15,27 +15,29 @@
  *     along with wraelclast-online.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wo;
+package wo.trade;
 
-import org.aeonbits.owner.Config;
-import org.aeonbits.owner.Config.Key;
+import lombok.extern.log4j.Log4j2;
+import org.aeonbits.owner.ConfigFactory;
+import wo.Main;
+import wo.MainConfig;
+
+import java.util.Properties;
 
 /**
- * Created 10/31/2016.
+ * Created 11/1/2016.
  */
-@Config.Sources({
-    "classpath:config.properties"
-})
-public interface MainConfig extends Config {
-    String WINDOW_TITLE_MATCH_TESTING_MODE = "WRAECLAST_ONLINE_for_testing_purposes";
+@Log4j2
+public class ManualTest {
+    public static void main(String[] args) {
+        Properties cmdArgs = new Properties();
+        String url = ManualTest.class.getClassLoader().getResource("akara.html").toString();
+        cmdArgs.put("home.url", url);
+        cmdArgs.put("poe.client.window.title", MainConfig.WINDOW_TITLE_MATCH_TESTING_MODE);
 
-    @Key("home.url")
-    String homeUrl();
+        MainConfig mainConfig = ConfigFactory.create(MainConfig.class, cmdArgs);
+        log.info("Config - Home URL - {}", mainConfig.homeUrl());
 
-    @Key("systemtray.icon.url")
-    String systemTrayIconUrl();
-
-    @Key("poe.client.window.title")
-    @DefaultValue("Path of Exile")
-    String poeClientWindowTitle();
+        Main.start(mainConfig);
+    }
 }

@@ -17,6 +17,7 @@
 
 package wo.trade;
 
+import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j2;
 import org.junit.Test;
 import wo.Bridge;

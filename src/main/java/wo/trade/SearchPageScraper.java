@@ -143,9 +143,9 @@ public class SearchPageScraper {
 			itemframeStr = Util.regexMatch("itemframe(\\d)", itemframeStr, 1);
 			if (itemframeStr != null) {
 				int frame = Integer.parseInt(itemframeStr);
-				item.rarity = TradeItem.Rarity.valueOf(frame);
+				item.rarity = Rarity.valueOf(frame);
 			} else {
-				item.rarity = TradeItem.Rarity.unknown;
+				item.rarity = Rarity.unknown;
 			}
 			
 			// ----- Verify ----- //
@@ -165,14 +165,14 @@ public class SearchPageScraper {
 						// implicit mod
 						Elements implicitLIs = ulMods.get(0).getElementsByTag("li");
 						Element implicitLi = implicitLIs.last();
-						TradeItem.Mod impMod = new TradeItem.Mod(implicitLi.attr("data-name"), implicitLi.attr("data-value"));
+						Mod impMod = new Mod(implicitLi.attr("data-name"), implicitLi.attr("data-value"));
 						item.implicitMod = impMod;
 					}
 					int indexOfExplicitMods = ulMods.size() - 1;
 					Elements modsLi = ulMods.get(indexOfExplicitMods).getElementsByTag("li");
 					for (Element modLi : modsLi) {
 						// explicit mods
-						TradeItem.Mod mod = new TradeItem.Mod(modLi.attr("data-name"), modLi.attr("data-value"));
+						Mod mod = new Mod(modLi.attr("data-name"), modLi.attr("data-value"));
 						item.explicitMods.add(mod);
 					}
 				}

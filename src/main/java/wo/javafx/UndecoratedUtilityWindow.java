@@ -21,7 +21,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javax.swing.JFrame;
-import javafx.stage.Screen;
+
 import org.aeonbits.owner.ConfigFactory;
 import wo.MainConfig;
 import wo.jna.JnaHelper;
@@ -31,9 +31,10 @@ public class UndecoratedUtilityWindow extends JFrame {
 
     public static final String WINDOW_TITLE = "Wraeclast Online";
     private JFXPanel fxContainer;
-    private MainConfig mainConfig = ConfigFactory.create(MainConfig.class);
+    private MainConfig config;
 
-	public UndecoratedUtilityWindow() {
+	public UndecoratedUtilityWindow(MainConfig config) {
+        this.config = config;
 		setSize(650, 500);
 		setType(Type.UTILITY);
 		setUndecorated(true);
@@ -57,7 +58,8 @@ public class UndecoratedUtilityWindow extends JFrame {
 
     public boolean isPoEActive() {
         String activeWindowTitle = JnaHelper.getActiveWindowTitle();
-        boolean isPoEWindowFocused = activeWindowTitle.equals(mainConfig.poeClientWindowTitle());
+        boolean isPoEWindowFocused = activeWindowTitle.equals(config.poeClientWindowTitle())
+                || config.poeClientWindowTitle().equals(MainConfig.WINDOW_TITLE_MATCH_TESTING_MODE);
         boolean isWoFocused = activeWindowTitle.equals(WINDOW_TITLE);
         return isPoEWindowFocused || isWoFocused;
     }

@@ -17,24 +17,22 @@
 
 package wo.trade;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Models one item in the search results
  */
+@ToString
 public class TradeItem {
 
     public String id; // the id in the search result html page
@@ -84,466 +82,81 @@ public class TradeItem {
 
     public Mod implicitMod;
     public List<Mod> explicitMods = new ArrayList<>();
-//		public Verify verified = Verify.UKNOWN;
-    public boolean guildItem = false;
-    public String wtb = null;
-    public String guildDiscount = null;
-    public boolean newInAutomated = false;
 
-    public List<Mod> getMods() {
-        List<Mod> mods = explicitMods.stream().collect(Collectors.toList());
-        if (implicitMod != null) {
-            mods.add(0, new Mod("--------------", null));
-            mods.add(0, implicitMod);
-        }
-        return mods;
-    }
-
-    public List<String> getReqs() {
-        return labelList(
-                labelVal("Lvl", reqLvl),
-                labelVal("Str", reqStr),
-                labelVal("Dex", reqDex),
-                labelVal("Int", reqInt));
-    }
-
-    public List<String> getItem() {
-        return labelList(
-                labelVal("No", idFinal()),
-                labelVal("Name", nameFinal()),
-                labelVal("League", league),
-                labelVal("Quality", quality),
-                labelVal("Identified", String.valueOf(identified)),
-                labelVal("Corrupted", String.valueOf(corrupted)),
-                labelVal("SocketsRaw", socketsRaw),
-                labelVal("StackSize", stackSize),
-                labelVal("MapQuantity", mapQuantity));
-    }
-
-    public List<String> getOffense() {
-        return labelList(
-                labelVal("pDPS", physDmgAtMaxQuality),
-                labelVal("eDPS", eleDmg),
-                labelVal("DPS", dmgAtMaxQuality),
-                labelVal("APS", attackSpeed),
-                labelVal("ele", eleDmgRange),
-                labelVal("phys", physDmgRangeAtMaxQuality));
-    }
-
-    public List<String> getDefense() {
-        return labelList(
-                labelVal("Armour", armourAtMaxQuality),
-                labelVal("Evasion", evasionAtMaxQuality),
-                labelVal("ES", energyShieldAtMaxQuality),
-                labelVal("Block", block),
-                labelVal("Crit", crit),
-                labelVal("Map-Gem Lvl", level));
-    }
-
-    private List<String> labelList(String ... labels) {
-        return asList(labels).stream()
-                .filter(Objects::nonNull)
-                .collect(toList());
-    }
-
-    public List<String> getSeller() {
-        String highestLvl = substringAfter(ageAndHighLvl, "h");
-        String age = substringBetween(ageAndHighLvl, "a", "h");
-        age = isNumeric(age) ? now().minusDays(parseInt(age)).format(ofPattern("MMM dd uuuu")) : age;
-        return labelList(
-                labelVal("IGN", ign),
-                labelVal("Joined", age),
-                labelVal("HighestLvl", highestLvl),
-                labelVal("Account", seller),
-                labelVal("Thread", thread),
-//					labelVal("Verified", verified.name()),
-//					labelVal("", threadUrl),
-                labelVal("Online", String.valueOf(containsIgnoreCase(online, "online"))));
-    }
-
-    private String labelVal(String label, String val) {
-        return trimToNull(val) == null ? null : label + ": " + val;
-    }
-
-    public String wtb() {
-        if (wtb != null) {
-            return wtb;
-        }
-        return String.format(
-                "@%s Hi, WTB your \"%s\" listed for %s in %s league.",
-                ign, name, buyout, league);
-    }
-
-    public void wtb(String wtb) {
-        this.wtb = wtb;
-    }
-
-    public void guildDiscount(String guildDiscount) {
-        this.guildDiscount = guildDiscount;
-    }
-
-    public String guildDiscount() {
-        return guildDiscount;
-    }
-
-    public boolean newInAutomated() {
-        return newInAutomated;
-    }
-
-    /**
-     * @author thirdy
-     *
-     */
-    public static class Mod {
-        String name;
-        String value;
-        String forgottenMod;
-
-        public Mod(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public String getForgottenMod() {
-            return forgottenMod;
-        }
-
-        public void setForgottenMod(String forgottenMod) {
-            this.forgottenMod = forgottenMod;
-        }
-
-        @Override
-        public String toString() {
-//				return System.lineSeparator() + "Mod [name=" + name + ", value=" + value + "]";
-            if (forgottenMod != null) {
-                return forgottenMod;
-            }
-            return toStringDisplay();
-        }
-
-        /*  Convert the ff into human readable form:
-            #Socketed Gems are Supported by level # Increased Area of Effect
-            ##% increased Physical Damage
-            #+# to Strength
-            #+# to Accuracy Rating
-            #+# Mana Gained on Kill
-            #+# to Weapon range
-         */
-        public String toStringDisplay() {
-            String display = name;
-            if (startsWith(name, "#") || startsWith(name, "$")) {
-                display = removeStart(display, "#");
-                display = removeStart(display, "$");
-                String val = endsWith(value, ".0") ? StringUtils.substringBefore(value, ".0") : value;
-                display = replaceOnce(display, "#", val);
-            }
-            return display;
-        }
-
-        public String toUUID() {
-            return name + ":" + value;
-        }
-    }
-
-    public String toDisplay(String newLine) {
-        StringBuilder builder = new StringBuilder();
-        String _quality  = isNotBlank(quality) ? " " + quality + "%" : "";
-        String linksocks = isNotBlank(socketsRaw) ? " " + socketsRaw : "";
-        String strCorrupt = corrupted ? " Corrupted " : "";
-        strCorrupt += !identified ? " Unidentified " : "";
-        builder.append(format("[%s] %s%s%s", id, name, linksocks, _quality));
-        builder.append(format("%s -----%s------ ", newLine, strCorrupt));
-        builder.append(newLine);
-        if (implicitMod != null) {
-            builder.append(format("%s", implicitMod.toStringDisplay()));
-            builder.append(newLine + " ----------- " + newLine);
-        }
-        if (explicitMods.size() > 0) {
-            for (Mod mod : explicitMods) {
-                builder.append(format("%s", mod.toStringDisplay()));
-                builder.append(newLine);
-            }
-            builder.append("-----------" + newLine);
-        }
-        String _physDmg 	= isNotBlank(physDmgAtMaxQuality) ? ("pDPS " + physDmgAtMaxQuality) : "";
-        String _eleDmg 		= isNotBlank(eleDmg) 			  ? ("eDPS " + eleDmg) : "";
-        String _attackSpeed = isNotBlank(attackSpeed) 		  ? ("APS " + attackSpeed) : "";
-        String _crit 		= isNotBlank(crit) 				  ? ("Cc " + crit) : "";
-        String offense = format("%s %s %s %s", _physDmg, _eleDmg, _attackSpeed, _crit).trim();
-        offense = offense.isEmpty() ? "" : (offense + newLine);
-        builder.append(offense);
-
-        String _armour 		= isNotBlank(armourAtMaxQuality) 	? ("Ar " + armourAtMaxQuality) : "";
-        String _evasion 	= isNotBlank(evasionAtMaxQuality) 	? ("Ev " + evasionAtMaxQuality) : "";
-        String _energyShield = isNotBlank(energyShieldAtMaxQuality) ? ("Es " + energyShieldAtMaxQuality) : "";
-        String _block 		= isNotBlank(block) 				? ("Bk " + block) : "";
-        String defense = format("%s %s %s %s", _armour, _evasion, _energyShield, _block).trim();
-        defense = defense.isEmpty() ? "" : (defense + newLine);
-        builder.append(defense);
-
-        builder.append(format("%s IGN: %s", buyout, ign));
-        return builder.toString();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        String lineSeparator = System.lineSeparator();
-        builder.append(lineSeparator);
-        builder.append("id=");
-        builder.append(id);
-        builder.append(lineSeparator);
-        builder.append("buyout=");
-        builder.append(buyout);
-        builder.append(lineSeparator);
-        builder.append("name=");
-        builder.append(name);
-        builder.append(lineSeparator);
-        builder.append("corrupted=");
-        builder.append(corrupted);
-        builder.append(lineSeparator);
-        builder.append("identified=");
-        builder.append(identified);
-        builder.append(lineSeparator);
-        builder.append("ign=");
-        builder.append(ign);
-        builder.append(lineSeparator);
-        builder.append("socketsRaw=");
-        builder.append(socketsRaw);
-        builder.append(lineSeparator);
-        builder.append("stackSize=");
-        builder.append(stackSize);
-        builder.append(lineSeparator);
-        builder.append("quality=");
-        builder.append(quality);
-        builder.append(lineSeparator);
-        builder.append("physDmgRangeAtMaxQuality=");
-        builder.append(physDmgRangeAtMaxQuality);
-        builder.append(lineSeparator);
-        builder.append("physDmgAtMaxQuality=");
-        builder.append(physDmgAtMaxQuality);
-        builder.append(lineSeparator);
-        builder.append("eleDmgRange=");
-        builder.append(eleDmgRange);
-        builder.append(lineSeparator);
-        builder.append("attackSpeed=");
-        builder.append(attackSpeed);
-        builder.append(lineSeparator);
-        builder.append("dmgAtMaxQuality=");
-        builder.append(dmgAtMaxQuality);
-        builder.append(lineSeparator);
-        builder.append("crit=");
-        builder.append(crit);
-        builder.append(lineSeparator);
-        builder.append("level=");
-        builder.append(level);
-        builder.append(lineSeparator);
-        builder.append("eleDmg=");
-        builder.append(eleDmg);
-        builder.append(lineSeparator);
-        builder.append("armourAtMaxQuality=");
-        builder.append(armourAtMaxQuality);
-        builder.append(lineSeparator);
-        builder.append("evasionAtMaxQuality=");
-        builder.append(evasionAtMaxQuality);
-        builder.append(lineSeparator);
-        builder.append("energyShieldAtMaxQuality=");
-        builder.append(energyShieldAtMaxQuality);
-        builder.append(lineSeparator);
-        builder.append("block=");
-        builder.append(block);
-        builder.append(lineSeparator);
-        builder.append("reqLvl=");
-        builder.append(reqLvl);
-        builder.append(lineSeparator);
-        builder.append("reqStr=");
-        builder.append(reqStr);
-        builder.append(lineSeparator);
-        builder.append("reqInt=");
-        builder.append(reqInt);
-        builder.append(lineSeparator);
-        builder.append("reqDex=");
-        builder.append(reqDex);
-        builder.append(lineSeparator);
-        builder.append("mapQuantity=");
-        builder.append(mapQuantity);
-        builder.append(lineSeparator);
-        builder.append("ageAndHighLvl=");
-        builder.append(ageAndHighLvl);
-        builder.append(lineSeparator);
-        builder.append("league=");
-        builder.append(league);
-        builder.append(lineSeparator);
-        builder.append("seller=");
-        builder.append(seller);
-        builder.append(lineSeparator);
-        builder.append("thread=");
-        builder.append(thread);
-        builder.append(lineSeparator);
-        builder.append("sellerid=");
-        builder.append(sellerid);
-        builder.append(lineSeparator);
-        builder.append("threadUrl=");
-        builder.append(threadUrl);
-        builder.append(lineSeparator);
-        builder.append("imageUrl=");
-        builder.append(imageUrl);
-        builder.append(lineSeparator);
-        builder.append("implicitMod=");
-        builder.append(implicitMod);
-        builder.append(lineSeparator);
-        builder.append("explicitMods=");
-        builder.append(explicitMods);
-        builder.append(lineSeparator);
-        builder.append("online=");
-        builder.append(online);
-        builder.append(lineSeparator);
-        return builder.toString();
-    }
-
-//		public String getId() {
-//			return id;
-//		}
-
-    public String getBo() {
-        String str = buyout;
-        str = replace(str, "alteration", "alt");
-        str = replace(str, "fusing", "fuse");
-        str = replace(str, "jewellers", "jew");
-        str = replace(str, "exalted", "ex");
-        str = replace(str, "alchemy", "alch");
-        str = replace(str, "chaos", "ch");
-        str = replace(str, "chromatic", "chrm");
-        str = replace(str, "chance", "chan");
-        return str;
-    }
-
-//		public String getPseudoEleResistance() {
-//			return getExplicitModValueByName("#(pseudo) +#% total Elemental Resistance");
-//		}
+//    public List<Mod> getMods() {
+//        List<Mod> mods = explicitMods.stream().collect(Collectors.toList());
+//        if (implicitMod != null) {
+//            mods.add(0, new Mod("--------------", null));
+//            mods.add(0, implicitMod);
+//        }
+//        return mods;
+//    }
 //
-//		public String getPseudoLife() {
-//			return getExplicitModValueByName("#(pseudo) (total) +# to maximum Life");
-//		}
+//    public String wtb() {
+//        if (wtb != null) {
+//            return wtb;
+//        }
+//        return String.format(
+//                "@%s Hi, WTB your \"%s\" listed for %s in %s league.",
+//                ign, name, buyout, league);
+//    }
+
+//    public String toDisplay(String newLine) {
+//        StringBuilder builder = new StringBuilder();
+//        String _quality  = isNotBlank(quality) ? " " + quality + "%" : "";
+//        String linksocks = isNotBlank(socketsRaw) ? " " + socketsRaw : "";
+//        String strCorrupt = corrupted ? " Corrupted " : "";
+//        strCorrupt += !identified ? " Unidentified " : "";
+//        builder.append(format("[%s] %s%s%s", id, name, linksocks, _quality));
+//        builder.append(format("%s -----%s------ ", newLine, strCorrupt));
+//        builder.append(newLine);
+//        if (implicitMod != null) {
+//            builder.append(format("%s", implicitMod.toStringDisplay()));
+//            builder.append(newLine + " ----------- " + newLine);
+//        }
+//        if (explicitMods.size() > 0) {
+//            for (Mod mod : explicitMods) {
+//                builder.append(format("%s", mod.toStringDisplay()));
+//                builder.append(newLine);
+//            }
+//            builder.append("-----------" + newLine);
+//        }
+//        String _physDmg 	= isNotBlank(physDmgAtMaxQuality) ? ("pDPS " + physDmgAtMaxQuality) : "";
+//        String _eleDmg 		= isNotBlank(eleDmg) 			  ? ("eDPS " + eleDmg) : "";
+//        String _attackSpeed = isNotBlank(attackSpeed) 		  ? ("APS " + attackSpeed) : "";
+//        String _crit 		= isNotBlank(crit) 				  ? ("Cc " + crit) : "";
+//        String offense = format("%s %s %s %s", _physDmg, _eleDmg, _attackSpeed, _crit).trim();
+//        offense = offense.isEmpty() ? "" : (offense + newLine);
+//        builder.append(offense);
 //
-//		public String getFireRes() {
-//			return getExplicitModValueByName("#+#% to Fire Resistance");
-//		}
+//        String _armour 		= isNotBlank(armourAtMaxQuality) 	? ("Ar " + armourAtMaxQuality) : "";
+//        String _evasion 	= isNotBlank(evasionAtMaxQuality) 	? ("Ev " + evasionAtMaxQuality) : "";
+//        String _energyShield = isNotBlank(energyShieldAtMaxQuality) ? ("Es " + energyShieldAtMaxQuality) : "";
+//        String _block 		= isNotBlank(block) 				? ("Bk " + block) : "";
+//        String defense = format("%s %s %s %s", _armour, _evasion, _energyShield, _block).trim();
+//        defense = defense.isEmpty() ? "" : (defense + newLine);
+//        builder.append(defense);
 //
-//		public String getColdRes() {
-//			return getExplicitModValueByName("#+#% to Cold Resistance");
-//		}
+//        builder.append(format("%s IGN: %s", buyout, ign));
+//        return builder.toString();
+//    }
+
+
+//    public String getBo() {
+//        String str = buyout;
+//        str = replace(str, "alteration", "alt");
+//        str = replace(str, "fusing", "fuse");
+//        str = replace(str, "jewellers", "jew");
+//        str = replace(str, "exalted", "ex");
+//        str = replace(str, "alchemy", "alch");
+//        str = replace(str, "chaos", "ch");
+//        str = replace(str, "chromatic", "chrm");
+//        str = replace(str, "chance", "chan");
+//        return str;
+//    }
 //
-//		public String getLightRes() {
-//			return getExplicitModValueByName("#+#% to Light Resistance");
-//		}
+//    public String toShortDebugInfo() {
+//        return String.format("id=%s name=%s account=%s thread=%s", id, name, seller, thread);
+//    }
 
-//		private String getExplicitModValueByName(String name) {
-//			for (Mod mod : explicitMods) {
-//				if (mod.getName().equalsIgnoreCase(name)) {
-//					return mod.getValue();
-//				}
-//			}
-//			return "";
-//		}
-
-    /**
-     * Used for showing exceptions in the result table.
-     */
-    public static TradeItem exceptionItem(Exception e) {
-        TradeItem item = new TradeItem();
-        item.name = e.getMessage();
-        item.ign = e.getClass().getName();
-        item.socketsRaw = e.getCause().getMessage();
-        return item;
-    }
-
-    public String seller() {
-        return seller;
-    }
-
-    public String dataHash() {
-        return dataHash;
-    }
-
-    public String thread() {
-        return thread;
-    }
-
-    public String toShortDebugInfo() {
-        return String.format("id=%s name=%s account=%s thread=%s", id, name, seller, thread);
-    }
-
-//		public void verified(Verify verified) {
-//			this.verified = verified;
-//		}
-
-    public void guildItem(boolean guildItem) {
-        this.guildItem = guildItem;
-    }
-
-    public String nameFinal() {
-        return name;
-    }
-
-    public String idFinal() {
-        if (corrupted) {
-            return id + " [CORRUPTED]";
-        }
-        return id;
-    }
-
-//		public ImageIcon getArt() {
-//			ImageIcon imageIcon = null;
-//			try {
-//				boolean artEnabled = Config.getBooleanProperty(Config.RESULT_TABLE_ART_ENABLED, true);
-//				if (artEnabled) {
-//					URL url = new URL(imageUrl);
-//					imageIcon = ImageCache.getInstance().get(url.toString());
-//				}
-//			} catch (MalformedURLException e) {
-//				logger.error("Error while grabbing art from: " + imageUrl, e);
-//			}
-//			return imageIcon;
-//		}
-
-    public int toUUID() {
-        String explicitModsUUID = explicitMods.stream().map(Mod::toUUID).collect(Collectors.joining(":"));
-        String implicitModuuid = implicitMod != null ? implicitMod.toUUID() : null;
-        List<String> uuidList = asList(thread, name, buyout, String.valueOf(corrupted), socketsRaw, quality,
-                physDmgRangeAtMaxQuality, physDmgAtMaxQuality, eleDmgRange, attackSpeed, dmgAtMaxQuality, crit, level, eleDmg,
-                armourAtMaxQuality, evasionAtMaxQuality, energyShieldAtMaxQuality, block, mapQuantity, implicitModuuid, explicitModsUUID);
-        String uuid = uuidList.stream().collect(Collectors.joining(":"));
-        return Integer.valueOf(uuid.hashCode());
-    }
-
-    public boolean guildItem() {
-        return guildItem;
-    }
-
-    public static enum Rarity {
-        normal,
-        magic,
-        rare,
-        unique,
-        gem,
-        currency,
-        divinationcard,
-        unknown;
-
-        public static Rarity valueOf(int ordinal) {
-            for (Rarity r : values()) {
-                if (r.ordinal() == ordinal) return r;
-            }
-            return unknown;
-        }
-    }
 }

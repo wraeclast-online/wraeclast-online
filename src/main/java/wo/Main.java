@@ -42,31 +42,31 @@ public class Main {
         MainConfig mainConfig = ConfigFactory.create(MainConfig.class, cmdArgs);
         log.info("Config - Home URL - {}", mainConfig.homeUrl());
 
+        start(mainConfig);
+    }
+
+    public static void start(MainConfig config) {
         NativeHookHelper.initAndRegisterHook();
-
         Platform.setImplicitExit(false);
-
-//        Application.launch(MainController.class, args);
-
         SwingUtilities.invokeLater(() -> {
             // initialize JavaFX, this hack was found here:
             // http://stackoverflow.com/questions/11273773/javafx-2-1-toolkit-not-initialized
             JFXPanel jfxPanel = new JFXPanel();
             Platform.runLater(() -> {
-                UndecoratedUtilityWindow hostWindow = new UndecoratedUtilityWindow();
+                UndecoratedUtilityWindow hostWindow = new UndecoratedUtilityWindow(config);
                 Bridge bridge = new Bridge(hostWindow);
 
                 NativeHook nativeHook = new NativeHook();
                 GlobalScreen.addNativeKeyListener(nativeHook);
 
-                Browser browser = new Browser(bridge, nativeHook);
+                Browser browser = new Browser(config, bridge, nativeHook);
                 hostWindow.setScene(browser);
 
-                SystemTray st = new SystemTray(browser);
+                SystemTray st = new SystemTray(config, browser);
                 st.addAppToTray();
 
                 nativeHook.onKeyEsc(hostWindow::hideFrame);
-                nativeHook.onKeyV(() -> {
+                nativeHook.onKeyTilde(() -> {
                     if (hostWindow.isPoEActive()) {
                         Platform.runLater(browser::toggleVisibility);
                     }

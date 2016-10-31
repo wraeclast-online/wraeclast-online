@@ -35,10 +35,11 @@ import java.net.URL;
 public class SystemTray {
 
     private final Browser browser;
-    private MainConfig mainConfig = ConfigFactory.create(MainConfig.class);
+    private final MainConfig config;
 
-    public SystemTray(Browser browser) {
+    public SystemTray(MainConfig config, Browser browser) {
         this.browser = browser;
+        this.config = config;
     }
 
     void addAppToTray() {
@@ -54,7 +55,7 @@ public class SystemTray {
 
             // set up a system tray icon.
             java.awt.SystemTray tray = java.awt.SystemTray.getSystemTray();
-            URL imageLoc = new URL(mainConfig.systemTrayIconUrl());
+            URL imageLoc = new URL(config.systemTrayIconUrl());
             java.awt.Image image = ImageIO.read(imageLoc);
             java.awt.TrayIcon trayIcon = new java.awt.TrayIcon(image);
 

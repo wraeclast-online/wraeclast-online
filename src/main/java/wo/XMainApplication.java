@@ -59,7 +59,7 @@
 //        st.addAppToTray();
 //
 //        nativeHook.onKeyEsc(this::toggleBrowserVisibility);
-//        nativeHook.onKeyV(this::toggleBrowserVisibility);
+//        nativeHook.onKeyTilde(this::toggleBrowserVisibility);
 //        GlobalScreen.addNativeKeyListener(nativeHook);
 //    }
 //

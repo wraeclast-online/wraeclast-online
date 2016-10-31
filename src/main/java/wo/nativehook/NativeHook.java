@@ -17,7 +17,6 @@
 
 package wo.nativehook;
 
-import javafx.application.Platform;
 import lombok.Getter;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
@@ -32,15 +31,15 @@ public class NativeHook implements NativeKeyListener {
 
     private boolean ctrlPressed = false;
     private boolean altPressed = false;
-    private Callback callbackOnV;
+    private Callback callbackOnTilde;
     private Callback callbackOnEsc;
 
     public interface Callback {
         void callback();
     }
 
-    public void onKeyV(Callback callback) {
-        this.callbackOnV = callback;
+    public void onKeyTilde(Callback callback) {
+        this.callbackOnTilde = callback;
     }
 
     public void onKeyEsc(Callback callback) {
@@ -61,8 +60,8 @@ public class NativeHook implements NativeKeyListener {
             altPressed = true;
         }
 
-        if (e.getKeyCode() == NativeKeyEvent.VC_V) {
-            callbackOnV.callback();
+        if (e.getKeyCode() == NativeKeyEvent.VC_BACKQUOTE) {
+            callbackOnTilde.callback();
         }
     }
 

@@ -20,6 +20,7 @@ package wo.trade;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,7 +113,7 @@ public class TradeParams {
     }
 
     private Map<String, String> asMap() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new LinkedHashMap<>();
         map.put("league", league);
         map.put("type", type);
         map.put("base", base);

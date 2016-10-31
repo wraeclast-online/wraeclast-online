@@ -35,7 +35,7 @@ class Browser extends StackPane {
  
     private final WebView webView = new WebView();
     private final WebEngine webEngine = webView.getEngine();
-    private MainConfig mainConfig = ConfigFactory.create(MainConfig.class);
+    private MainConfig config;
 
     private final NativeHook nativeHook;
     private final Bridge bridge;
@@ -44,11 +44,13 @@ class Browser extends StackPane {
     private double yOffset = 0;
 
     @Setter
-    private String url = mainConfig.homeUrl();
+    private String url;
 
-    public Browser(Bridge bridge, NativeHook nativeHook) {
+    public Browser(MainConfig config, Bridge bridge, NativeHook nativeHook) {
+        this.config = config;
         this.bridge = bridge;
         this.nativeHook = nativeHook;
+        url = config.homeUrl();
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {

@@ -17,8 +17,13 @@
 
 package wo;
 
+import com.google.gson.Gson;
 import javafx.application.Platform;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import wo.trade.*;
 
 import javax.swing.*;
@@ -44,11 +49,64 @@ public class Bridge {
         Platform.exit();
     }
 
+    public void copyToClipboard(String str) {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(str);
+        clipboard.setContent(content);
+    }
+
     public TradeParams newTradeParams() {
         return new TradeParams();
     }
 
-    public List<TradeItem> searchTradeItems(TradeParams params) {
-        return tradeService.searchTradeItems(params);
+    /**
+     * SAMPLE OUTPUT:
+        {
+          "tradeItems" : [{
+             "id" : "0",
+             "buyout" : "1 fusing",
+             "name" : "Life Leech Support",
+             "ign" : "Панночка",
+             "corrupted" : false,
+             "identified" : true,
+             "rarity" : "gem",
+             "dataHash" : "",
+             "socketsRaw" : "",
+             "quality" : "0",
+             "physDmgRangeAtMaxQuality" : "",
+             "physDmgAtMaxQuality" : "",
+             "eleDmgRange" : "",
+             "attackSpeed" : "",
+             "dmgAtMaxQuality" : "",
+             "crit" : "",
+             "level" : "1",
+             "eleDmg" : "",
+             "armourAtMaxQuality" : "",
+             "evasionAtMaxQuality" : "",
+             "energyShieldAtMaxQuality" : "",
+             "block" : "",
+             "mapQuantity" : "",
+             "league" : "Essence",
+             "seller" : "Gaerovich",
+             "thread" : "",
+             "sellerid" : "None",
+             "online" : "Online",
+             "imageUrl" : "https://web.poecdn.com/image/Art/2DItems/Gems/Support/LifeLeech.png?scale\u003d1\u0026w\u003d1\u0026h\u003d1\u0026v\u003da286b7cb68bee2319a14a80c1e4bcf9c3",
+             "explicitMods" : []
+             }]
+        }
+     */
+    public String searchTradeItems(TradeParams params) {
+        List<TradeItem> tradeItems = tradeService.searchTradeItems(params);
+        SearchTradeResult searchTradeResult = new SearchTradeResult();
+        searchTradeResult.tradeItems = tradeItems;
+        Gson gson = new Gson();
+        String json = gson.toJson(searchTradeResult);
+        return json;
+    }
+
+    public static class SearchTradeResult {
+        private List<TradeItem> tradeItems;
     }
 }
