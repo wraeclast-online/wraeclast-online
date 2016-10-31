@@ -34,11 +34,11 @@ import java.net.URL;
 @Log4j2
 public class SystemTray {
 
-    private final MainController mainApplication;
+    private final Browser browser;
     private MainConfig mainConfig = ConfigFactory.create(MainConfig.class);
 
-    public SystemTray(MainController mainApplication) {
-        this.mainApplication = mainApplication;
+    public SystemTray(Browser browser) {
+        this.browser = browser;
     }
 
     void addAppToTray() {
@@ -84,7 +84,7 @@ public class SystemTray {
             java.awt.MenuItem urlItem = new java.awt.MenuItem("Set URL");
             urlItem.addActionListener(event -> {
                 String browserUrl = JOptionPane.showInputDialog("Enter URL");
-                mainApplication.setBrowserUrl(browserUrl);
+                browser.setUrl(browserUrl);
             });
 
             // setup the popup menu for the application.

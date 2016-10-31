@@ -23,6 +23,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import lombok.Setter;
 import netscape.javascript.JSObject;
 import org.aeonbits.owner.ConfigFactory;
 import wo.jna.JnaHelper;
@@ -42,6 +43,7 @@ class Browser extends StackPane {
     private double xOffset = 0;
     private double yOffset = 0;
 
+    @Setter
     private String url = mainConfig.homeUrl();
 
     public Browser(Bridge bridge, NativeHook nativeHook) {

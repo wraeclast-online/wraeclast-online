@@ -62,6 +62,9 @@ public class Main {
                 Browser browser = new Browser(bridge, nativeHook);
                 hostWindow.setScene(browser);
 
+                SystemTray st = new SystemTray(browser);
+                st.addAppToTray();
+
                 nativeHook.onKeyEsc(hostWindow::hideFrame);
                 nativeHook.onKeyV(() -> {
                     if (hostWindow.isPoEActive()) {
