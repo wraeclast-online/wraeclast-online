@@ -17,35 +17,40 @@
 
 package wo;
 
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
 import javafx.scene.input.Clipboard;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+import org.aeonbits.owner.ConfigFactory;
+import wo.jna.JnaHelper;
+import wo.nativehook.NativeHook;
+
+import javax.swing.*;
 
 class Browser extends StackPane {
  
-    final WebView browser = new WebView();
-    final WebEngine webEngine = browser.getEngine();
+    private final WebView webView = new WebView();
+    private final WebEngine webEngine = webView.getEngine();
+    private MainConfig mainConfig = ConfigFactory.create(MainConfig.class);
+
+    private final NativeHook nativeHook;
     private final Bridge bridge;
 
-    public Browser(Bridge bridge) {
-        this.bridge = bridge;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
-        //apply the styles
-        getStyleClass().add("browser");
-        // load the web page
-//        webEngine.load("http://www.oracle.com/products/index.html");
-//        webEngine.load("http://exiletra.de/");
+    private String url = mainConfig.homeUrl();
+
+    public Browser(Bridge bridge, NativeHook nativeHook) {
+        this.bridge = bridge;
+        this.nativeHook = nativeHook;
 
         webEngine.getLoadWorker().stateProperty().addListener(
                 (ov, oldState, newState) -> {
-                    System.out.println("newState: " + newState);
                     if (newState == Worker.State.SUCCEEDED) {
-                        System.out.println("newState == Worker.State.SUCCEEDED --- true");
                         Clipboard clipboard = Clipboard.getSystemClipboard();
                         JSObject win = (JSObject) webEngine.executeScript("window");
                         win.call("onJavaLoadSucceed", bridge);
@@ -53,34 +58,38 @@ class Browser extends StackPane {
                     }
                 }
         );
-        //add the web view to the scene
-        webEngine.setOnAlert(new EventHandler<WebEvent<String>>() {
-            @Override
-            public void handle(WebEvent<String> event) {
-                event.consume();
+        // disable annoying system sound on webView alert
+        webEngine.setOnAlert(event -> event.consume());
+        getChildren().add(webView);
+
+        // draggable window on alt + mouse
+        webView.setOnMousePressed(event -> {
+            if (nativeHook.isAltPressed()) {
+                xOffset = bridge.getStage().getX() - event.getScreenX();
+                yOffset = bridge.getStage().getY() - event.getScreenY();
             }
         });
-        getChildren().add(browser);
-
+        webView.setOnMouseDragged(event -> {
+            if (nativeHook.isAltPressed()) {
+                double x = event.getScreenX() + xOffset;
+                double y = event.getScreenY() + yOffset;
+                bridge.getStage().setLocation((int) x, (int) y);
+            }
+        });
     }
 
-//    private Node createSpacer() {
-//        Region spacer = new Region();
-//        HBox.setHgrow(spacer, Priority.ALWAYS);
-//        return spacer;
-//    }
-//
-//    @Override protected void layoutChildren() {
-//        double w = getWidth();
-//        double h = getHeight();
-//        layoutInArea(browser,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
-//    }
-//
-//    @Override protected double computePrefWidth(double height) {
-//        return 750;
-//    }
-//
-//    @Override protected double computePrefHeight(double width) {
-//        return 500;
-//    }
+    public void load(String url) {
+        webEngine.load(url);
+    }
+
+    public void toggleVisibility() {
+        JFrame stage = bridge.getStage();
+        boolean visible = stage.isVisible();
+        if (visible) {
+            stage.setVisible(false);
+        } else {
+            stage.setVisible(true);
+            load(url);
+        }
+    }
 }

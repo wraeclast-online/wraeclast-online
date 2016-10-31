@@ -15,30 +15,27 @@
  *     along with wraelclast-online.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wo;
+package wo.jna;
 
-import javafx.application.Platform;
-import javafx.stage.Stage;
-import lombok.Getter;
-
-import javax.swing.*;
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.RECT;
 
 /**
- * This is what js can use to callback
+ * http://stackoverflow.com/questions/6391439/getting-active-window-information-in-java
+ *
+ * Created 10/31/2016.
  */
-public class Bridge {
-    @Getter
-    private final JFrame stage;
+public class JnaHelper {
+    private static final int MAX_TITLE_LENGTH = 1024;
 
-    public Bridge(JFrame stage) {
-        this.stage = stage;
-    }
-
-    public void setSize(int w, int h) {
-        stage.setSize(w, h);
-    }
-
-    public void exit() {
-        Platform.exit();
+    public static String getActiveWindowTitle() {
+        char[] buffer = new char[MAX_TITLE_LENGTH * 2];
+        HWND hwnd = User32.INSTANCE.GetForegroundWindow();
+        User32.INSTANCE.GetWindowText(hwnd, buffer, MAX_TITLE_LENGTH);
+        String title = Native.toString(buffer);
+        System.out.println("ACTIVEWINDOW: " + title);
+        return title;
     }
 }

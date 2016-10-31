@@ -29,4 +29,11 @@ import org.aeonbits.owner.Config.Key;
 public interface MainConfig extends Config {
     @Key("home.url")
     String homeUrl();
+
+    @Key("systemtray.icon.url")
+    String systemTrayIconUrl();
+
+    @Key("poe.client.window.title")
+    @DefaultValue("Path of Exile")
+    String poeClientWindowTitle();
 }

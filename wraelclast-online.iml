@@ -27,5 +27,7 @@
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.7" level="project" />
     <orderEntry type="library" name="Maven: org.aeonbits.owner:owner-java8:1.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.aeonbits.owner:owner:1.0.6" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.2.2" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.2.2" level="project" />
   </component>
 </module>
