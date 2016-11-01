@@ -17,22 +17,24 @@
 
 package wo.trade;
 
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.substringAfter;
-import static org.apache.commons.lang3.StringUtils.substringBefore;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
+@Log4j2
 public class Util {
 
 	public static String removeThoseDamnWhiteSpace(String s) {
@@ -112,5 +114,30 @@ public class Util {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+
+	public static void openUrlViaBrowser(String url) {
+		String s = url;
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(new URI(s));
+			} catch (Exception e) {
+				log.error("Error on opening browser, address: " + s + ": " + e.getMessage(), e);
+			}
+		} else {
+			log.error(("Launch browser failed, please manually visit: " + s));
+		}
+	}
+
+	public static void copyToClipboard(String str) {
+		Clipboard clipboard = Clipboard.getSystemClipboard();
+		final ClipboardContent content = new ClipboardContent();
+		content.putString(str);
+		clipboard.setContent(content);
+	}
+
+	public static void openWebsite() {
+		openUrlViaBrowser("https://wraeclast-online.github.io/");
 	}
 }

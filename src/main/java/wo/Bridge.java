@@ -50,10 +50,7 @@ public class Bridge {
     }
 
     public void copyToClipboard(String str) {
-        Clipboard clipboard = Clipboard.getSystemClipboard();
-        final ClipboardContent content = new ClipboardContent();
-        content.putString(str);
-        clipboard.setContent(content);
+        Util.copyToClipboard(str);
     }
 
     public TradeParams newTradeParams() {

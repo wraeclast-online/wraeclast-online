@@ -17,21 +17,19 @@
 
 package wo;
 
-import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.Clipboard;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import lombok.Setter;
 import netscape.javascript.JSObject;
-import org.aeonbits.owner.ConfigFactory;
-import wo.jna.JnaHelper;
 import wo.nativehook.NativeHook;
 
 import javax.swing.*;
 
-class Browser extends StackPane {
+public class Browser extends StackPane {
  
     private final WebView webView = new WebView();
     private final WebEngine webEngine = webView.getEngine();
@@ -45,6 +43,7 @@ class Browser extends StackPane {
 
     @Setter
     private String url;
+    private JFXPanel fxContainer;
 
     public Browser(MainConfig config, Bridge bridge, NativeHook nativeHook) {
         this.config = config;

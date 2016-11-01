@@ -22,6 +22,7 @@ import lombok.extern.log4j.Log4j2;
 import org.aeonbits.owner.ConfigFactory;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
+import wo.trade.Util;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -64,8 +65,8 @@ public class SystemTray {
 
             // if the user selects the default menu item (which includes the app name),
             // show the wo.main app stage.
-            java.awt.MenuItem openItem = new java.awt.MenuItem("Wraeclast Online (v)");
-//            openItem.addActionListener(event -> Platform.runLater(mainApplication::toggleBrowserVisibility));
+            java.awt.MenuItem openItem = new java.awt.MenuItem("Wraeclast Online Website");
+            openItem.addActionListener(event -> Platform.runLater(Util::openWebsite));
 
             // the convention for tray icons seems to be to set the default icon for opening
             // the application stage in a bold font.

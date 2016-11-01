@@ -17,14 +17,22 @@
 
 package wo.javafx;
 
+import examples.ComponentResizer;
+import examples.UndecoratedExample;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javax.swing.JFrame;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import org.aeonbits.owner.ConfigFactory;
+import wo.Browser;
 import wo.MainConfig;
 import wo.jna.JnaHelper;
+
+import java.awt.*;
 
 // https://www.namekdev.net/2016/03/javafx-taskbar-less-undecorated-window/
 public class UndecoratedUtilityWindow extends JFrame {
@@ -41,14 +49,34 @@ public class UndecoratedUtilityWindow extends JFrame {
 		setAlwaysOnTop(true);
         setTitle(WINDOW_TITLE);
         setLocationRelativeTo(null);
+        setBackground(Color.gray);
 //		defaultCloseOperation = EXIT_ON_CLOSE
+
+        ComponentResizer cr = new ComponentResizer();
+//        cr.setMinimumSize(new Dimension(300, 300));
+//        cr.setMaximumSize(new Dimension(800, 600));
+        cr.registerComponent(this);
+        cr.setSnapSize(new Dimension(10, 10));
 	}
 
 	public void setScene(Parent root) {
         Scene scene = new Scene(root, 650, 500);
         fxContainer = new JFXPanel();
+        fxContainer.setBackground(Color.gray);
         fxContainer.setScene(scene);
-        getContentPane().add(fxContainer);
+
+        OutsidePanel outsidePanel = new OutsidePanel(fxContainer);
+        add(outsidePanel);
+    }
+
+    static class OutsidePanel extends JPanel {
+
+        public OutsidePanel(JComponent center) {
+            setLayout(new BorderLayout());
+            add(center, BorderLayout.CENTER);
+            setBorder(new LineBorder(Color.gray, 2));
+//            setBorder(new EmptyBorder(5, 5, 5, 5));
+        }
     }
 
     public void hideFrame() {
