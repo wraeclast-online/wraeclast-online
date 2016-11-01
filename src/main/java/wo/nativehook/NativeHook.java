@@ -35,6 +35,7 @@ public class NativeHook implements NativeKeyListener {
     private boolean ctrlPressed = false;
     private boolean altPressed = false;
     private Callback callbackOnTilde;
+    private Callback callbackOnCtrlTilde;
     private Callback callbackOnEsc;
 
     public NativeHook(MainConfig config) {
@@ -47,6 +48,10 @@ public class NativeHook implements NativeKeyListener {
 
     public void onKeyTilde(Callback callback) {
         this.callbackOnTilde = callback;
+    }
+
+    public void onKeyCtrlTilde(Callback callback) {
+        this.callbackOnCtrlTilde = callback;
     }
 
     public void onKeyEsc(Callback callback) {
@@ -67,7 +72,10 @@ public class NativeHook implements NativeKeyListener {
             altPressed = true;
         }
 
-        if (e.getKeyCode() == config.hotkeyVirtualCode()) {
+
+        if (e.getKeyCode() == config.hotkeyVirtualCode() && ctrlPressed) {
+            callbackOnCtrlTilde.callback();
+        } else if (e.getKeyCode() == config.hotkeyVirtualCode()) {
             callbackOnTilde.callback();
         }
     }

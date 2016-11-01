@@ -40,6 +40,7 @@ public class UndecoratedUtilityWindow extends JFrame {
 		setUndecorated(true);
 		setAlwaysOnTop(true);
         setTitle(WINDOW_TITLE);
+        setLocationRelativeTo(null);
 //		defaultCloseOperation = EXIT_ON_CLOSE
 	}
 

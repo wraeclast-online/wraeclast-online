@@ -71,6 +71,11 @@ public class Main {
                         Platform.runLater(browser::toggleVisibility);
                     }
                 });
+                nativeHook.onKeyCtrlTilde(() -> {
+                    if (hostWindow.isPoEActive()) {
+                        Platform.runLater(browser::showAndReload);
+                    }
+                });
 
             });
         });

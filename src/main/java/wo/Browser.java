@@ -86,6 +86,13 @@ class Browser extends StackPane {
         webEngine.load(url);
     }
 
+    public void showAndReload() {
+        JFrame stage = bridge.getStage();
+        boolean visible = stage.isVisible();
+        webEngine.reload();
+        if (!visible) stage.setVisible(true);
+    }
+
     public void toggleVisibility() {
         JFrame stage = bridge.getStage();
         boolean visible = stage.isVisible();
@@ -93,9 +100,7 @@ class Browser extends StackPane {
             stage.setVisible(false);
         } else {
             stage.setVisible(true);
-            if (webEngine.getLoadWorker().getState() == Worker.State.SUCCEEDED) {
-                webEngine.reload();
-            } else {
+            if (webEngine.getLoadWorker().getState() != Worker.State.SUCCEEDED) {
                 load(url);
             }
         }
