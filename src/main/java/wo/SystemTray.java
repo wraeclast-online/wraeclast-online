@@ -111,5 +111,6 @@ public class SystemTray {
             log.error(e1);
         }
         Platform.exit();
+        System.exit(0);
     }
 }
