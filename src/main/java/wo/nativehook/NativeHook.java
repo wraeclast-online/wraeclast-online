@@ -20,6 +20,7 @@ package wo.nativehook;
 import lombok.Getter;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+import wo.MainConfig;
 
 /**
  * TODO provide a better API
@@ -29,10 +30,16 @@ import org.jnativehook.keyboard.NativeKeyListener;
 @Getter
 public class NativeHook implements NativeKeyListener {
 
+    private final MainConfig config;
+
     private boolean ctrlPressed = false;
     private boolean altPressed = false;
     private Callback callbackOnTilde;
     private Callback callbackOnEsc;
+
+    public NativeHook(MainConfig config) {
+        this.config = config;
+    }
 
     public interface Callback {
         void callback();
@@ -60,7 +67,7 @@ public class NativeHook implements NativeKeyListener {
             altPressed = true;
         }
 
-        if (e.getKeyCode() == NativeKeyEvent.VC_BACKQUOTE) {
+        if (e.getKeyCode() == config.hotkeyVirtualCode()) {
             callbackOnTilde.callback();
         }
     }

@@ -19,15 +19,18 @@ package wo;
 
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Key;
+import org.jnativehook.keyboard.NativeKeyEvent;
 
 /**
  * Created 10/31/2016.
  */
 @Config.Sources({
-    "classpath:config.properties"
+        "file:~/wraeclast-online.properties",
+        "file:wraeclast-online.properties",
+    "classpath:wraeclast-online.properties"
 })
 public interface MainConfig extends Config {
-    String WINDOW_TITLE_MATCH_TESTING_MODE = "WRAECLAST_ONLINE_for_testing_purposes";
+    String WINDOW_TITLE_MATCH_TESTING_MODE = "skip_restriction_to_poe_client_only";
 
     @Key("home.url")
     String homeUrl();
@@ -38,4 +41,8 @@ public interface MainConfig extends Config {
     @Key("poe.client.window.title")
     @DefaultValue("Path of Exile")
     String poeClientWindowTitle();
+
+    @Key("hotkey.vc")
+    @DefaultValue("" + NativeKeyEvent.VC_BACKQUOTE)
+    int hotkeyVirtualCode();
 }

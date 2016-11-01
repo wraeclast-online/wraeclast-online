@@ -56,7 +56,7 @@ public class Main {
                 UndecoratedUtilityWindow hostWindow = new UndecoratedUtilityWindow(config);
                 Bridge bridge = new Bridge(hostWindow);
 
-                NativeHook nativeHook = new NativeHook();
+                NativeHook nativeHook = new NativeHook(config);
                 GlobalScreen.addNativeKeyListener(nativeHook);
 
                 Browser browser = new Browser(config, bridge, nativeHook);
